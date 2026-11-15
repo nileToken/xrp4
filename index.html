@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XRP Key Implementation</title>
+    <script src='https://cdn.jsdelivr.net/npm/xrp-lib/dist/xrp-lib.min.js'></script>
+</head>
+<body>
+    <h1>XRP Multi-Signature Transaction Signing</h1>
+    <script>
+        async function signTransaction(seedPhrase, transaction) {
+            // Generate key pairs from seed phrase
+            const keyPair = xrpLib.HdAccount.fromSeed(seedPhrase);
+            const publicKeys = keyPair.getPublicKeys();
+
+            // Sign the transaction
+            const signedTransaction = await xrpLib.Transaction.sign(transaction, publicKeys);
+            return signedTransaction;
+        }
+
+        // Example usage
+        const seedPhrase = 'your 12-word seed phrase here';
+        const transaction = {
+            "TransactionType": "Payment",
+            "Account": "yourAccountAddress",
+            "Destination": "destinationAccountAddress",
+            "Amount": "1000000000", // amount in drops
+            "Fee": "12",
+            "Sequence": 1
+        };
+
+        signTransaction(seedPhrase, transaction).then(signedTransaction => {
+            console.log('Signed transaction:', signedTransaction);
+        }).catch(error => {
+            console.error('Error signing transaction:', error);
+        });
+    </script>
+</body>
+</html>
